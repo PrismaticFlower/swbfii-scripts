@@ -59,7 +59,7 @@ TrackFunctionCalls = function (name)
 
    -- Hook the function.
    _G[name] = function (...)
-      local info = debug.getinfo(1)
+      local info = debug.getinfo(2)
    
       print("Message Severity: 0")
       
