@@ -52,7 +52,7 @@ AddRandomClasses = function(teamIndex, numberToPick, possibleClasses)
    
    assert(teamIndex > 0, "AddRandomClasses - teamIndex must be greater than zero.")
    assert(numberToPick > 0, "AddRandomClasses - numberToPick must be greater than zero.")
-   assert(numberToPick >= possibleClasses:getn(), "AddRandomClasses - numberToPick must be less than or equal to the possible number of classes.")
+   assert(numberToPick >= table.getn(possibleClasses), "AddRandomClasses - numberToPick must be less than or equal to the possible number of classes.")
 
    local pickedClasses = {}
    
@@ -88,12 +88,12 @@ VerifyClassTableEntry = function(tableEntry)
    end
 end
 
-AddPickedClassesToGame = function(pickedClasses)
+AddPickedClassesToGame = function(teamIndex, pickedClasses)
    LoadPickedClassesLvls(pickedClasses)
    
    -- Add each class.
    for index, classEntry in ipairs(pickedClasses) do
-      AddUnitClass(teamIndex, classEntry.className, className.minUnits, className.maxAi)
+      AddUnitClass(teamIndex, classEntry.className, classEntry.minUnits, classEntry.maxUnits)
    end
 end
 
@@ -113,18 +113,18 @@ LoadPickedClassesLvls = function(pickedClasses)
          
          -- Add `childName` to the list of children to load, if needed.
          if (childName and not FindStringInList(neededLvls[lvlPath], childName)) then 
-            table.insert(neededLvls[lvlPath], childName) = true 
+            table.insert(neededLvls[lvlPath], childName) 
          end
       end
    end
    
    -- Call ReadDataFile for each entry in `neededLvls`.
-   for index, entry in ipairs(neededLvls) do 
+   for index, entry in pairs(neededLvls) do
       ReadDataFile(index, unpack(entry))
    end
 end
 
-FindStringInList = function(value, list)
+FindStringInList = function(list, value)
    for listIndex, listValue in ipairs(list) do 
       if (value == listValue) then 
          return true
